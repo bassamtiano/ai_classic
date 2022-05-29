@@ -1,5 +1,7 @@
 from enum import Enum
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Deque
+from heapq import heappop, heappush
+import sys
 
 import random
 
@@ -87,13 +89,19 @@ class Maze:
         # cek apakah bisa ke atas
         if ml.row - 1 >= 0 and self._grid[ml.row - 1][ml.column] != Cell.BLOCKED:
             locations.append(MazeLocation(ml.row - 1, ml.column))
-
+        
         # cek apakah bisa ke kanan
-        if ml.column - 1 < self._columns and self._grid[ml.row, ml.column + 1] != Cell.BLOCKED:
+        if ml.column + 1 < self._columns and self._grid[ml.row][ml.column + 1] != Cell.BLOCKED:
             locations.append(MazeLocation(ml.row, ml.column + 1))
 
         # cek apakah bisa ke kiri
-        if ml.column - 1 >= 0 and self._grid[ml.row, ml.column - 1] != Cell.BLOCKED:
+        if ml.column - 1 >= 0 and self._grid[ml.row][ml.column - 1] != Cell.BLOCKED:
             locations.append(MazeLocation(ml.row, ml.column - 1))
 
         return locations
+    def mark(self, path: List[MazeLocation]):
+        for maze_location in path:
+            self._grid[maze_location.row][maze_location.column] = Cell.PATH
+
+            self._grid[self.start.row][self.start.column] = Cell.START
+            self._grid[self.goal.row][self.goal.column] = Cell.GOAL

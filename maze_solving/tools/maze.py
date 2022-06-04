@@ -82,6 +82,10 @@ class Maze:
         if ml.row > self._rows or ml.column > self._columns or ml.row < 0 or ml.column <0:
             raise ValueError(f'{ml} merupakan lokasi yang salah dengan maze yang berukuran {self._rows, self._columns}')
         
+        # Pergerakan di cek berdasarkan
+        # 1. Apakah sudah out of bounderies
+        # 2. Apakah Sudah menemu BLOCK atau tembok
+
         # cek apakah bisa ke bawah
         if ml.row + 1 < self._rows and self._grid[ml.row + 1][ml.column] != Cell.BLOCKED:
             locations.append(MazeLocation(ml.row + 1, ml.column))
@@ -105,3 +109,11 @@ class Maze:
 
             self._grid[self.start.row][self.start.column] = Cell.START
             self._grid[self.goal.row][self.goal.column] = Cell.GOAL
+
+    def clear(self, path: List[MazeLocation]):
+        # Remove path yang punya tanda #
+        for maze_location in path:
+            self._grid[maze_location.row][maze_location.column] = Cell.EMPTY
+        
+        self._grid[self.start.row][self.start.column] = Cell.START
+        self._grid[self.goal.row][self.goal.column] = Cell.GOAL

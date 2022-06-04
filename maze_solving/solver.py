@@ -36,18 +36,26 @@ if __name__ == "__main__":
 
     start = MazeLocation(start_row, start_column)
     goal = MazeLocation(goal_row, goal_column)
-    
 
-    # start = MazeLocation(0, 0)
-    # goal = MazeLocation(3, 5)
 
     my_maze = Maze(rows = size_rows, columns = size_columns, start = start, goal = goal, sparsness = 0.8)
 
-    end = dfs(my_maze.start, my_maze.goal_test, my_maze.successors)
+    dfs_end = dfs(my_maze.start, my_maze.goal_test, my_maze.successors)
+    bfs_end = bfs(my_maze.start, my_maze.goal_test, my_maze.successors)
     
-    path = node_to_path(end)
+    # end_baru = end
 
-    my_maze.mark(path)
+    # while end_baru.parent is not None:
+    #     end_baru = end_baru.parent
+    #     print(end_baru.state)
+
+    dfs_path = node_to_path(dfs_end)
+    my_maze.mark(dfs_path)
+    print(my_maze)
+    my_maze.clear(dfs_path)
+
+    bfs_path = node_to_path(bfs_end)
+    my_maze.mark(bfs_path)
     print(my_maze)
     
 

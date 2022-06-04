@@ -3,6 +3,8 @@ from typing import Deque, Generic, T, Optional, List
 
 import sys
 
+import random
+
 class Node(Generic[T]):
     def __init__(self,
                  state: T,
@@ -62,11 +64,13 @@ def dfs(initial, goal_test, successors):
         current_node = frontier.pop()
         current_state = current_node.state # MazeLocation(4, 5)
         if goal_test(current_state):
-            print(f'Solusi telah ditemukan di pencarian ke {state_count}')
-            return current_node
+            return current_node, state_count
+
+        suc = successors(current_state)
+        random.shuffle(suc)        
 
         # successors check path nya bisa dilewati atau tidak / di block
-        for kemungkinan in successors(current_state): # ke bawah ke atas ke kanan ke kiri
+        for kemungkinan in suc: # ke bawah ke atas ke kanan ke kiri
 
             # path nya sudah dilewati atau belum
             if kemungkinan in explored:
@@ -97,16 +101,13 @@ def bfs(initial, goal_test, successors):
     explored = {initial}
     state_count = 1
 
-    print(initial)
-
     while not frontier.empty:
         state_count += 1
         current_node = frontier.pop()
         current_state = current_node.state
 
         if goal_test(current_state) :
-            print("Koordinat Goal sudah di temukan")
-            return current_node
+            return current_node, state_count
         for child in successors(current_state):
             # Koordinat sudah di lewati / di jelajahi
             if child in explored:
